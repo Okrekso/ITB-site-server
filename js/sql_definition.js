@@ -1,8 +1,8 @@
 const mysql = require('mysql');
 // requiers
 
-let host = 'localhost';
-let user = 'u380338396_mstr';
+let host = '185.224.137.110';
+let user = porcess.env.DB_User;
 let pass = process.env.DB_Pass;
 let database = 'u380338396_itb';
 
