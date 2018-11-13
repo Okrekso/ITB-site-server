@@ -7,6 +7,7 @@ let pass = process.env.DB_Pass;
 let database = 'u380338396_itb';
 
 function getConnection() {
+	console.log(host,user,pass);
 	let con = mysql.createConnection({
 		host: host,
 		user: user,
