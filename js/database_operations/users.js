@@ -37,7 +37,8 @@ function login(email, pass, callback = (secureCode, err) => {}) {
 function getUsers(callback = result => {}) {
   db.query(
     "SELECT ID,Name,Email,Xp, getType(Id) as Acc_type FROM `USERS` ORDER BY Name ASC",
-    result => {
+    (result,err) => {
+      console.log(result);
       callback(result);
     }
   );
