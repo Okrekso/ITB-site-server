@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.get("https://itb-server.herokuapp.com/", (req, res) => {
   res.send(
     "<h1>IT B.E.A.N.S. Database Access Server</h1><p>here you can access data of it b.e.a.n.s., but better do it in our site: <a href='http://itbeans.online'>http://itbeans.online</a>"
   );
