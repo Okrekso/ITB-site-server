@@ -38,7 +38,7 @@ function getUsers(callback = result => {}) {
   db.query(
     "SELECT ID,Name,Email,Xp, getType(Id) as Acc_type FROM `USERS` ORDER BY Name ASC",
     (result,err) => {
-      console.log(result);
+      console.log(result,err);
       callback(result);
     }
   );
