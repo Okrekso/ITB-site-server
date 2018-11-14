@@ -1,3 +1,4 @@
+const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
 
 router.get("/", (req, res) => {

@@ -1,4 +1,5 @@
 const visits = require("../database_operations/visits");
+const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
 
 router.post("/addVisit", (req, res) => {

@@ -1,4 +1,5 @@
 const users = require("../database_operations/users");
+const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
 
 router.post("/newUser", (req, res) => {

@@ -1,4 +1,5 @@
 const request = require("../database_operations/requests");
+const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
 
 router.post("/newRequest", (req, res) => {

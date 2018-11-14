@@ -1,4 +1,5 @@
 const events = require("../database_operations/events");
+const secure = require("../database_operations/secureCode");
 
 let router = require("express").Router();
 
