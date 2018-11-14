@@ -3,7 +3,7 @@ const db = require('../database');
 
 function getAccessLevel(secureCode, callback = (accessLevel) => {}) {
 	db.query(`SELECT Xp FROM USERS WHERE Secure_code='${secureCode}'`, (res, err) => {
-		if(res[0]==undefined) return callback(-1);
+		if(res==undefined || res[0]==undefined) return callback(-1);
 
 		let Xp = parseInt(res[0].Xp);
 		if (res == undefined) {
