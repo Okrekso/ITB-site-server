@@ -26,7 +26,7 @@ function sendMail(
     port: 587,
     auth: {
       user: "support@itbeans.online",
-      pass: "4uyEq90dfvcT"
+      pass: process.env.emailPass
     }
   });
 

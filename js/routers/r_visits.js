@@ -1,8 +1,9 @@
 const visits = require("../database_operations/visits");
 const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
+const sqlstring = require("sqlstring");
 
-router.post("/addVisit", (req, res) => {
+router.post("/add", (req, res) => {
   let beanID = req.body.beanID;
   let eventID = req.body.eventID;
   let secureCode = req.body.secureCode;
@@ -26,7 +27,7 @@ router.post("/addVisit", (req, res) => {
   );
 });
 
-router.post("/removeVisit", (req, res) => {
+router.post("/remove", (req, res) => {
   let beanID = req.body.beanID;
   let eventID = req.body.eventID;
   let secureCode = req.body.secureCode;
@@ -48,10 +49,9 @@ router.post("/removeVisit", (req, res) => {
   );
 });
 
-router.get("/getVisitsOnEvent", (req, res) => {
-  let eventID = req.query.eventID;
-  visits.selectVisitsOnEvent(eventID, (result, err) => {
-    res.send(result);
+router.get("/get/:evID", (req, res) => {
+  visits.selectVisitsOnEvent(req.params.evID, (result, err) => {
+    return res.send(result);
   });
 });
 

@@ -1,8 +1,9 @@
 const db = require('../database');
+const sqlstring = require("sqlstring");
 // requiers
 
 function getAccessLevel(secureCode, callback = (accessLevel) => {}) {
-	db.query(`SELECT Xp FROM USERS WHERE Secure_code='${secureCode}'`, (res, err) => {
+	db.query(`SELECT Xp FROM USERS WHERE Secure_code=${sqlstring.escape(secureCode)}`, (res, err) => {
 		if(res==undefined || res[0]==undefined) return callback(-1);
 
 		let Xp = parseInt(res[0].Xp);
@@ -30,8 +31,8 @@ function getAccessLevel(secureCode, callback = (accessLevel) => {}) {
 function protectFunction(secureCode, func = () => {}, minProtectionLevel = 0, callback = (access_result) => {}) {
 	getAccessLevel(secureCode, (accessLevel) => {
 		if (accessLevel >= minProtectionLevel) {
-			func();
 			callback(1);
+			func();
 			return;
 		} else {
 			callback(0);

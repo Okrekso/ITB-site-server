@@ -2,12 +2,12 @@ let router = require("express").Router();
 let drops = require("../database_operations/drops");
 const secure = require("../database_operations/secureCode");
 
-router.get("/chekDropAvailability", (req, res) => {
+router.get("/availability", (req, res) => {
   drops.checkDropAvailability(result => {
     res.send(result);
   });
 });
-router.post("/addDrop", (req, res) => {
+router.post("/add", (req, res) => {
   let secureCode = req.body.secureCode;
   secure.protectFunction(
     secureCode,

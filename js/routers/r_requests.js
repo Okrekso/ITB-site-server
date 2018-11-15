@@ -2,7 +2,7 @@ const request = require("../database_operations/requests");
 const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
 
-router.post("/newRequest", (req, res) => {
+router.post("/new", (req, res) => {
   let name = req.body.name;
   let email = req.body.email;
   let pass = req.body.pass;
@@ -18,13 +18,13 @@ router.post("/newRequest", (req, res) => {
   );
 });
 
-router.get("/getRequests", (req, res) => {
+router.get("/get", (req, res) => {
   let secureCode = req.query.secureCode;
   secure.protectFunction(
     secureCode,
     () => {
       request.getRequests(requests => {
-        if (requests) res.send(requests);
+        if (requests) return res.send(requests);
       });
     },
     4,
@@ -34,7 +34,7 @@ router.get("/getRequests", (req, res) => {
   );
 });
 
-router.post("/acceptRequest", (req, res) => {
+router.post("/accept", (req, res) => {
   let request_ID = req.body.request_ID;
   let secureCode = req.body.secureCode;
 
@@ -53,7 +53,7 @@ router.post("/acceptRequest", (req, res) => {
   );
 });
 
-router.post("/declineRequest", (req, res) => {
+router.post("/decline", (req, res) => {
   let request_ID = req.body.request_ID;
   let secureCode = req.body.secureCode;
   console.log("decline", request_ID, secureCode);

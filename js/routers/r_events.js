@@ -1,24 +1,32 @@
 const events = require("../database_operations/events");
 const secure = require("../database_operations/secureCode");
-
+const users = require("../database_operations/users");
 let router = require("express").Router();
 
-router.get("/all_Events", (req, res) => {
-  events.getEvents(events => {
-    res.send(events);
-  });
+router.get("/get(/:searchValue)?", (req, res) => {
+  if (req.params.searchValue == undefined) {
+    events.getEvents(events => {
+      res.send(events);
+    });
+    return;
+  }
+  if (isNaN(parseInt(req.params.searchValue))) {
+    users.findUserBySecure(req.params.searchValue, user => {
+      if (user)
+        events.getEventsByCreator(user.Id, events => {
+          res.send(events);
+        });
+    });
+    return;
+  } else {
+    events.getEventById(req.params.searchValue, event => {
+      res.send(event);
+    });
+    return;
+  }
 });
 
-router.get("/creator_events", (req, res) => {
-  users.findUserBySecure(req.query.secureCode, user => {
-    if (user)
-      events.getEventsByCreator(user.Id, events => {
-        res.send(events);
-      });
-  });
-});
-
-router.post("/newEvent", (req, res) => {
+router.post("/new", (req, res) => {
   let secureCode = req.body.secureCode;
   console.log("new event from", secureCode);
   secure.protectFunction(
@@ -45,7 +53,7 @@ router.post("/newEvent", (req, res) => {
   );
 });
 
-router.post("/removeEvent", (req, res) => {
+router.post("/remove", (req, res) => {
   let secureCode = req.body.secureCode;
   console.log("event deleted");
   secure.protectFunction(
@@ -72,7 +80,7 @@ router.post("/removeEvent", (req, res) => {
   );
 });
 
-router.post("/editEvent", (req, res) => {
+router.post("/edit", (req, res) => {
   let secureCode = req.body.secureCode;
   console.log("event edited");
   secure.protectFunction(
