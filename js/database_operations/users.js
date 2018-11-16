@@ -10,7 +10,9 @@ function findUserBySecure(secureCode, callback = result => {}) {
       `SELECT Id,Name,Email,Xp,${sqlstring.escape(accessLevel)} as Access_lvl, getType(Id) as Acc_type, (SELECT SUM(Xp) FROM GIFTS WHERE Bean_id=USERS.ID) AS Gifts, (SELECT SUM(Xp) FROM EVENTS WHERE ID IN (SELECT Event_id FROM VISITIONS WHERE Bean_id = USERS.ID)) AS Visits, (SELECT COUNT(ID) FROM VISITIONS WHERE Bean_id = USERS.ID) AS Visits_count FROM USERS WHERE Secure_code=${sqlstring.escape(secureCode)}`,
       result => {
         console.log(result);
+        if(result!=undefined)
         callback(result[0]);
+        return callback(undefined);
       }
     );
   });
@@ -20,7 +22,9 @@ function findUserById(Id, callback = result => {}) {
   db.query(
     `SELECT Id,Name,Email,Xp, getType(Id) as Acc_type, (SELECT SUM(Xp) FROM GIFTS WHERE Bean_id=USERS.ID) AS Gifts, (SELECT SUM(Xp) FROM EVENTS WHERE ID IN (SELECT Event_id FROM VISITIONS WHERE Bean_id = USERS.ID)) AS Visits, (SELECT COUNT(ID) FROM VISITIONS WHERE Bean_id = USERS.ID) AS Visits_count FROM USERS WHERE ID=${sqlstring.escape(Id)}`,
     result => {
+      if(result!=undefined)
       callback(result[0]);
+      return callback(null);
     }
   );
 }
