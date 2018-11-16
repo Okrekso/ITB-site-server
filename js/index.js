@@ -40,5 +40,4 @@ app.use("/gifts",require("./routers/r_gifts"));
 // payment
 app.use("/payment", require("./routers/r_payment"));
 
-// app.listen(process.env.PORT);
-app.listen(3000);
+app.listen(process.env.PORT);
