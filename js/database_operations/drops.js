@@ -8,6 +8,8 @@ function checkDropAvailability(callback = (result = false) => {}) {
   db.query(
     `SELECT ID FROM NULLS WHERE DATEDIFF(NOW(),Date_when)<70`,
     (result, err) => {
+      console.log("drop chek",result);
+      if(result==undefined || result==[]) callback(true);
       if (result.length == 0) return callback(true);
       return callback(false);
     }

@@ -2,24 +2,23 @@ const visits = require("../database_operations/visits");
 const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
 const sqlstring = require("sqlstring");
+const strings = require("../strings");
 
 router.post("/add", (req, res) => {
   let beanID = req.body.beanID;
   let eventID = req.body.eventID;
   let secureCode = req.body.secureCode;
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
-      console.log(beanID, eventID);
       visits.addVisit(secureCode, beanID, eventID, err => {
         console.log("error", err);
         if (!err) res.send(`added visit for ${beanID} on event ${eventID}`);
         else res.send(err);
       });
     },
-    2,
+    "Speaker, Admin",
     access_result => {
-      console.log(access_result);
       if (!access_result) {
         return res.send(strings.s_accessForbitten);
       }
@@ -32,7 +31,7 @@ router.post("/remove", (req, res) => {
   let eventID = req.body.eventID;
   let secureCode = req.body.secureCode;
 
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       visits.removeVisit(secureCode, beanID, eventID, err => {
@@ -40,7 +39,7 @@ router.post("/remove", (req, res) => {
         else res.send(err);
       });
     },
-    2,
+    "Speaker, Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);

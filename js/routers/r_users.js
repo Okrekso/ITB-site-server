@@ -3,6 +3,7 @@ const secure = require("../database_operations/secureCode");
 const db =require("../database");
 let router = require("express").Router();
 const sqlstring = require("sqlstring");
+const strings = require("../strings");
 
 router.post("/new", (req, res) => {
   let name = req.query.name;
@@ -10,7 +11,7 @@ router.post("/new", (req, res) => {
   let pass = req.query.pass;
 
   let secureCode = req.query.secureCode;
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       users.createNewUser(
@@ -24,7 +25,7 @@ router.post("/new", (req, res) => {
         }
       );
     },
-    2,
+    "Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);
@@ -56,9 +57,9 @@ router.get("/get(/:searchValue)?", (req, res) => {
   }
 });
 
-router.get("/accessLevel", (req, res) => {
+router.get("/beanType", (req, res) => {
   let secureCode = req.query.secureCode;
-  secure.getAccessLevel(secureCode, result => {
+  secure.getBeanType(secureCode, result => {
     return res.send(result.toString());
   });
 });

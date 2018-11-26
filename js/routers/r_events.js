@@ -2,6 +2,7 @@ const events = require("../database_operations/events");
 const secure = require("../database_operations/secureCode");
 const users = require("../database_operations/users");
 let router = require("express").Router();
+const strings = require("../strings");
 
 router.get("/get(/:searchValue)?", (req, res) => {
   if (req.params.searchValue == undefined) {
@@ -29,7 +30,7 @@ router.get("/get(/:searchValue)?", (req, res) => {
 router.post("/new", (req, res) => {
   let secureCode = req.body.secureCode;
   console.log("new event from", secureCode);
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       let values = {
@@ -43,11 +44,10 @@ router.post("/new", (req, res) => {
         res.send(event_res);
       });
     },
-    2,
+    "Speaker, Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);
-        console.log("no access for function");
       }
     }
   );
@@ -56,7 +56,7 @@ router.post("/new", (req, res) => {
 router.post("/remove", (req, res) => {
   let secureCode = req.body.secureCode;
   console.log("event deleted");
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       users.findUserBySecure(secureCode, user => {
@@ -70,7 +70,7 @@ router.post("/remove", (req, res) => {
         });
       });
     },
-    2,
+    "Speaker, Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);
@@ -83,7 +83,7 @@ router.post("/remove", (req, res) => {
 router.post("/edit", (req, res) => {
   let secureCode = req.body.secureCode;
   console.log("event edited");
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       let values = {
@@ -103,7 +103,7 @@ router.post("/edit", (req, res) => {
         });
       });
     },
-    2,
+    "Speaker, Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);

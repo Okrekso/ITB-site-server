@@ -17,10 +17,11 @@ function createEvent(
 ) {
   users.findUserBySecure(secureCode, user => {
     console.log(values, user);
+    console.log("DATE:",(values.Date_when));
     db.query(
       `INSERT INTO EVENTS(Header,Content,Date_when,Xp,Creator)VALUES(${
         sqlstring.escape(values.Header)
-      },${sqlstring.escape(values.Content)},${sqlstring.escape(values.Date_when)},${sqlstring.escape(values.Xp)},${sqlstring.escape(user.Id)})`,
+      },${sqlstring.escape(values.Content)},${values.Date_when=="NULL"?"NULL":sqlstring.escape(values.Date_when)},${sqlstring.escape(values.Xp)},${sqlstring.escape(user.Id)})`,
       (result, err) => {
         if (err) {
           callback(err);
@@ -65,7 +66,7 @@ function updateEvent(Id, newValues, callback = result => {}) {
   function addValue(valName, val, coma = true, string = true) {
     if (val)
       query += string
-        ? ` ${valName} = '${val}'${coma ? "," : ""}`
+        ? ` ${valName} = ${val}${coma ? "," : ""}`
         : ` ${valName} = ${val}${coma ? "," : ""}`;
   }
   addValue("Header", sqlstring.escape(newValues.Header));
