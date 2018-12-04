@@ -7,7 +7,6 @@ const strings = require("./strings");
 var app = express();
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", strings.s_site);
-  res.header("Access-Control-Allow-Origin", "test.itbns");
   res.header(
     "Access-Control-Allow-Headers",
     "Access-Control-Allow-Origin",
