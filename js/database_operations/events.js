@@ -55,9 +55,13 @@ function getEventsByCreator(CreatorID, callback=events=>{}){
 }
 
 function removeEvent(Id, callback = () => {}) {
-  db.query(`DELETE FROM EVENTS WHERE ID=${sqlstring.escape(Id)}`, (res, err) => {
+  db.query(`DELETE FROM VISITIONS WHERE Event_id=${sqlstring.escape(Id)}`, (res, err) => {
     if (err) return callback(err);
-    callback(res);
+    
+    db.query(`DELETE FROM EVENTS WHERE ID=${sqlstring.escape(Id)}`, (res, err) => {
+      if (err) return callback(err);
+      callback(res);
+    });
   });
 }
 

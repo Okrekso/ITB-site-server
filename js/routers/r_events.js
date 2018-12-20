@@ -55,7 +55,6 @@ router.post("/new", (req, res) => {
 
 router.post("/remove", (req, res) => {
   let secureCode = req.body.secureCode;
-  console.log("event deleted");
   secure.protectFunctionType(
     secureCode,
     () => {
@@ -63,8 +62,12 @@ router.post("/remove", (req, res) => {
         events.getEventById(req.body.Id, event => {
           if (event && user)
             if (event.Creator == user.Id) {
+              console.log("event deleted:", req.body.Id);
+
               events.removeEvent(req.body.Id, result => {
+                console.log("event delete status:", result);
                 res.send("success");
+                
               });
             } else return res.send(strings.s_accessForbitten);
         });
