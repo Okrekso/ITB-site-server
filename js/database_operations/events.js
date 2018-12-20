@@ -1,5 +1,6 @@
 const db = require("../database");
 const users = require("../database_operations/users");
+const sqlstring = require("sqlstring");
 // requiers
 function createEvent(
   values = {
@@ -16,10 +17,11 @@ function createEvent(
 ) {
   users.findUserBySecure(secureCode, user => {
     console.log(values, user);
+    console.log("DATE:",(values.Date_when));
     db.query(
-      `INSERT INTO EVENTS(Header,Content,Date_when,Xp,Creator)VALUES('${
-        values.Header
-      }','${values.Content}','${values.Date_when}',${values.Xp},${user.Id})`,
+      `INSERT INTO EVENTS(Header,Content,Date_when,Xp,Creator)VALUES(${
+        sqlstring.escape(values.Header)
+      },${sqlstring.escape(values.Content)},${values.Date_when=="NULL"?"NULL":sqlstring.escape(values.Date_when)},${sqlstring.escape(values.Xp)},${sqlstring.escape(user.Id)})`,
       (result, err) => {
         if (err) {
           callback(err);
@@ -39,23 +41,27 @@ function getEvents(callback = result => {}) {
 }
 
 function getEventById(Id, callback = result => {}) {
-  db.query(`SELECT * FROM EVENTS WHERE ID=${Id}`, (event,err) => {
+  db.query(`SELECT * FROM EVENTS WHERE ID=${sqlstring.escape(Id)}`, (event,err) => {
     if(err) callback(err);
     callback(event[0]);
   });
 }
 
 function getEventsByCreator(CreatorID, callback=events=>{}){
-  db.query(`SELECT * FROM EVENTS WHERE Creator=${CreatorID}`, (events,err)=>{
+  db.query(`SELECT * FROM EVENTS WHERE Creator=${sqlstring.escape(CreatorID)}`, (events,err)=>{
     if(err) return callback(err);
     callback(events);
   });
 }
 
 function removeEvent(Id, callback = () => {}) {
-  db.query(`DELETE FROM EVENTS WHERE ID=${Id}`, (res, err) => {
+  db.query(`DELETE FROM VISITIONS WHERE Event_id=${sqlstring.escape(Id)}`, (res, err) => {
     if (err) return callback(err);
-    callback(res);
+    
+    db.query(`DELETE FROM EVENTS WHERE ID=${sqlstring.escape(Id)}`, (res, err) => {
+      if (err) return callback(err);
+      callback(res);
+    });
   });
 }
 
@@ -64,15 +70,15 @@ function updateEvent(Id, newValues, callback = result => {}) {
   function addValue(valName, val, coma = true, string = true) {
     if (val)
       query += string
-        ? ` ${valName} = '${val}'${coma ? "," : ""}`
+        ? ` ${valName} = ${val}${coma ? "," : ""}`
         : ` ${valName} = ${val}${coma ? "," : ""}`;
   }
-  addValue("Header", newValues.Header);
-  addValue("Content", newValues.Content);
-  addValue("Date_when", newValues.Date_when);
-  addValue("Xp", newValues.Xp, false);
+  addValue("Header", sqlstring.escape(newValues.Header));
+  addValue("Content", sqlstring.escape(newValues.Content));
+  addValue("Date_when", sqlstring.escape(newValues.Date_when));
+  addValue("Xp", sqlstring.escape(newValues.Xp), false);
 
-  query += ` WHERE ID = ${Id}`;
+  query += ` WHERE ID = ${sqlstring.escape(Id)}`;
   console.log(query);
   db.query(query, (res, err) => {
     if (err) return callback(err);

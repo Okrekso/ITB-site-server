@@ -1,69 +1,76 @@
 const users = require("../database_operations/users");
 const secure = require("../database_operations/secureCode");
+const db =require("../database");
 let router = require("express").Router();
+const sqlstring = require("sqlstring");
+const strings = require("../strings");
 
-router.post("/newUser", (req, res) => {
-    let name = req.query.name;
-    let email = req.query.email;
-    let pass = req.query.pass;
-  
-    let secureCode = req.query.secureCode;
-    secure.protectFunction(
-      secureCode,
-      () => {
-        users.createNewUser(
-          {
-            Name: name,
-            Email: email,
-            Pass: pass
-          },
-          result => {
-            if (result == "success") res.send("created!");
-          }
-        );
-      },
-      2,
-      access_result => {
-        if (!access_result) {
-          res.send(strings.s_accessForbitten);
+router.post("/new", (req, res) => {
+  let name = req.query.name;
+  let email = req.query.email;
+  let pass = req.query.pass;
+
+  let secureCode = req.query.secureCode;
+  secure.protectFunctionType(
+    secureCode,
+    () => {
+      users.createNewUser(
+        {
+          Name: name,
+          Email: email,
+          Pass: pass
+        },
+        result => {
+          if (result == "success") res.send("created!");
         }
+      );
+    },
+    "Admin",
+    access_result => {
+      if (!access_result) {
+        res.send(strings.s_accessForbitten);
       }
-    );
-  });
+    }
+  );
+});
 
-  router.get("/all_users", (req, res) => {
+router.get("/get(/:searchValue)?", (req, res) => {
+  if (req.params.searchValue == undefined) {
     users.getUsers(users => {
-      res.send(users);
+      console.log("all");
+      return res.send(users);
     });
-  });
-  
-  router.get("/user_byId", (req, res) => {
-    let requestID = req.query.ID;
-    users.findUserById(requestID, user => {
-      res.send(user);
+    return;
+  }
+  if (isNaN(parseInt(req.params.searchValue))) {
+    console.log("secure", req.params.searchValue);
+    users.findUserBySecure(req.params.searchValue, user => {
+      return res.send(user);
     });
-  });
-  router.get("/user_bySecure", (req, res) => {
-    let secureCode = req.query.secureCode;
-    users.findUserBySecure(secureCode, user => {
-      res.send(user);
+    return;
+  } else {
+    console.log("id");
+    users.findUserById(req.params.searchValue, user => {
+      return res.send(user);
     });
-  });
+    return;
+  }
+});
 
-  router.get("/accessLevel", (req, res) => {
-    let secureCode = req.query.secureCode;
-    secure.getAccessLevel(secureCode, result => {
-      res.send(result.toString());
-    });
+router.get("/beanType", (req, res) => {
+  let secureCode = req.query.secureCode;
+  secure.getBeanType(secureCode, result => {
+    return res.send(result.toString());
   });
-  
-  router.get("/login", (req, res) => {
-    let email = req.query.email;
-    let pass = req.query.pass;
-    users.login(email, pass, (secureCode, err) => {
-      if (err) return res.send(err);
-      res.send(secureCode);
-    });
-  });
+});
 
-  module.exports = router;
+router.get("/login", (req, res) => {
+  let email = req.query.email;
+  let pass = req.query.pass;
+  users.login(email, pass, (secureCode, err) => {
+    if (err) return res.send(err);
+    return res.send(secureCode);
+  });
+});
+
+module.exports = router;

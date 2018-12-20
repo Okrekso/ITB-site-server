@@ -1,5 +1,8 @@
 const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
+let users = require("../database_operations/users");
+let mail = require("../mail");
+const strings = require("../strings");
 
 router.get("/", (req, res) => {
   res.send(

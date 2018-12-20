@@ -1,8 +1,9 @@
 const request = require("../database_operations/requests");
 const secure = require("../database_operations/secureCode");
 let router = require("express").Router();
+const strings = require("../strings");
 
-router.post("/newRequest", (req, res) => {
+router.post("/new", (req, res) => {
   let name = req.body.name;
   let email = req.body.email;
   let pass = req.body.pass;
@@ -18,33 +19,33 @@ router.post("/newRequest", (req, res) => {
   );
 });
 
-router.get("/getRequests", (req, res) => {
+router.get("/get", (req, res) => {
   let secureCode = req.query.secureCode;
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       request.getRequests(requests => {
-        if (requests) res.send(requests);
+        if (requests) return res.send(requests);
       });
     },
-    4,
+    "Admin",
     access_result => {
       if (!access_result) return res.send(strings.s_accessForbitten);
     }
   );
 });
 
-router.post("/acceptRequest", (req, res) => {
+router.post("/accept", (req, res) => {
   let request_ID = req.body.request_ID;
   let secureCode = req.body.secureCode;
 
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       request.acceptUser(request_ID);
       res.send("accepted");
     },
-    2,
+    "Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);
@@ -53,17 +54,17 @@ router.post("/acceptRequest", (req, res) => {
   );
 });
 
-router.post("/declineRequest", (req, res) => {
+router.post("/decline", (req, res) => {
   let request_ID = req.body.request_ID;
   let secureCode = req.body.secureCode;
   console.log("decline", request_ID, secureCode);
-  secure.protectFunction(
+  secure.protectFunctionType(
     secureCode,
     () => {
       request.declineUser(request_ID);
       res.send("declined");
     },
-    2,
+    "Admin",
     access_result => {
       if (!access_result) {
         res.send(strings.s_accessForbitten);
