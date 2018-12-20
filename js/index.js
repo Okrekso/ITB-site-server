@@ -1,6 +1,6 @@
 const express = require("express");
 const strings = require("./strings");
-
+module.exports.isTest = false
 // requiers
 
 // strings
