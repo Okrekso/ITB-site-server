@@ -18,3 +18,4 @@ router.post("/become", (req,res)=>{
     });
 });
 
+module.exports = router;
