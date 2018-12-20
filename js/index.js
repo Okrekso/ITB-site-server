@@ -41,6 +41,8 @@ app.use("/gifts",require("./routers/r_gifts"));
 app.use("/payment", require("./routers/r_payment"));
 // grants
 app.use("/grants", require("./routers/r_grants"));
+// santas
+app.use("/santa", require("./routers/r_santa"));
 
 app.listen(process.env.PORT);
 // app.listen(3000);
