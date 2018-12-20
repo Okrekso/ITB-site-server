@@ -19,7 +19,7 @@ function becomeSanta(userID) {
 
 module.exports.getSantas = function(callback = santas => {}) {
   db.query(`CALL GetSantas`, santas => {
-    callback(santas);
+    callback(santas[0]);
   });
 };
 module.exports.findMySanta = function(userID, callback=(res)=>{}) {
