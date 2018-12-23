@@ -15,7 +15,7 @@ function becomeSanta(userID) {
 
     db.query(
       `INSERT INTO e_santa(SantaID, FriendID)VALUES(${userID},${id})`,
-      (res, err) => {}
+      (res, err) => {console.error(err)}
     );
   });
 }
