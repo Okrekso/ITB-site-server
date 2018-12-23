@@ -25,10 +25,9 @@ module.exports.getSantas = function(callback = santas => {}) {
 module.exports.findMySanta = function(userID, callback = res => {}) {
   userID = sqlstring.escape(userID);
   db.query(
-    `SELECT * FROM e_santas WHERE santaID = ${userID}`,
+    `SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.FriendID=${user.Id} AND Shown=1`,
     (result, err) => {
-      if (result.length == 0) becomeSanta(userID);
-      else callback("you are already santa!");
+      if(!result) callback("your santa is hidden :)");
     }
   );
 };
@@ -36,10 +35,10 @@ module.exports.findMySanta = function(userID, callback = res => {}) {
 module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
   console.log(secureCode, "finding santa");
   users.findUserBySecure(secureCode,(user)=>{
-    console.log(user);
     if(!user) return;
     userID = user['Id'];
     db.query(`SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.SantaID=${user.Id}`,(friend)=>{
+      if(!friend) return becomeSanta(userID);
       callback(friend[0].Name);
     });
   });
