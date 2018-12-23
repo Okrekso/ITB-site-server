@@ -9,6 +9,7 @@ router.get("/get", (req, res) => {
 });
 
 router.get("/get/:secureCode", (req, res) => {
+  console.log("finding uniq santa:", req.params.secureCode);
   santa.findMyFriend(req.params.secureCode, friend => {
     res.send(friend);
   });

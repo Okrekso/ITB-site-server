@@ -34,7 +34,7 @@ module.exports.findMySanta = function(userID, callback = res => {}) {
 };
 
 module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
-  secureCode = sqlstring.escape(secureCode[0]);
+  secureCode = sqlstring.escape(secureCode);
   console.log(secureCode, "finding santa");
   users.findUserBySecure(secureCode,(user)=>{
     console.log(user);
