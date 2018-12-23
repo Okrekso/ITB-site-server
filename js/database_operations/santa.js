@@ -34,14 +34,13 @@ module.exports.findMySanta = function(userID, callback = res => {}) {
 };
 
 module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
-  secureCode = sqlstring.escape(secureCode);
   console.log(secureCode, "finding santa");
   users.findUserBySecure(secureCode,(user)=>{
     console.log(user);
     if(!user) return;
     userID = user['Id'];
     db.query(`SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.SantaID=${user.Id}`,(friend)=>{
-      callback(friend["Name"]);
+      callback(friend[0].Name);
     });
   });
 };
