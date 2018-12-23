@@ -39,6 +39,7 @@ module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
     if(user[0]==undefined) return;
     userID = user['Id'];
     db.query(`SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.SantaID=${user.Id}`,(friend)=>{
+      console.log("friend:",friend);
       if(friend[0]==undefined) return becomeSanta(userID);
       callback(friend[0].Name);
     });
