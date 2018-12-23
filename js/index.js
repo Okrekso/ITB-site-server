@@ -6,7 +6,9 @@ module.exports.isTest = false
 // strings
 var app = express();
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", strings.s_site);
+  strings.s_site.map((siteAccepted)=>{
+    res.header("Access-Control-Allow-Origin", siteAccepted);
+  });
   res.header(
     "Access-Control-Allow-Headers",
     "Access-Control-Allow-Origin",
