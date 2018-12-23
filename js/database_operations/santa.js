@@ -4,19 +4,21 @@ const sqlstring = require("sqlstring");
 
 function becomeSanta(userID) {
   console.log("start creating new santa");
-  users.getUsers(users => {
-    let id = userID;
-    while (id == userID || id == undefined) {
-      user = users[Math.floor(Math.random() * users.length)];
-      console.log(user);
-      id = user.ID;
-    }
-    console.log(`new santa created for ${userID}`);
-
-    db.query(
-      `INSERT INTO e_santa(SantaID, FriendID)VALUES(${userID},${id})`,
-      (res, err) => {console.error(err)}
-    );
+  module.exports.getSantas((santas)=>{
+    users.getUsers(users => {
+      let id = userID;
+      while (id == userID || id == undefined) {
+        user = users[Math.floor(Math.random() * users.length)];
+        console.log(user);
+        id = user.ID;
+      }
+      console.log(`new santa created for ${userID}`);
+  
+      db.query(
+        `INSERT INTO e_santas(SantaID, FriendID)VALUES(${userID},${id})`,
+        (res, err) => {console.error(err)}
+      );
+    });
   });
 }
 
