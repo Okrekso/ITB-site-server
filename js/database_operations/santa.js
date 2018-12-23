@@ -38,7 +38,7 @@ module.exports.findMySanta = function(userID, callback = res => {}) {
 module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
   console.log(secureCode, "finding santa");
   users.findUserBySecure(secureCode, user => {
-    if (user[0] == undefined) {
+    if (user == undefined) {
       console.log("no such user:",secureCode, user);
       return;
     }
