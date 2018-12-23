@@ -27,7 +27,7 @@ module.exports.findMySanta = function(userID, callback = res => {}) {
   db.query(
     `SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.FriendID=${user.Id} AND Shown=1`,
     (result, err) => {
-      if(!result) callback("your santa is hidden :)");
+      if(result[0]==undefined) callback("your santa is hidden :)");
     }
   );
 };
@@ -35,10 +35,10 @@ module.exports.findMySanta = function(userID, callback = res => {}) {
 module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
   console.log(secureCode, "finding santa");
   users.findUserBySecure(secureCode,(user)=>{
-    if(!user) return;
+    if(user[0]==undefined) return;
     userID = user['Id'];
     db.query(`SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.SantaID=${user.Id}`,(friend)=>{
-      if(!friend) return becomeSanta(userID);
+      if(friend[0]==undefined) return becomeSanta(userID);
       callback(friend[0].Name);
     });
   });
