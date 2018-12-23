@@ -7,8 +7,8 @@ function becomeSanta(userID) {
     let id = userID;
     while (id == userID) {
       id = users[Math.floor(Math.random() * users.length) + 0].ID;
-      console.log(`new santa created for ${userID}, his friend is ${id}`);
     }
+    console.log(`new santa created for ${userID}`);
 
     db.query(
       `INSERT INTO e_santa(SantaID, FriendID)VALUES(${userID},${id})`,
@@ -22,7 +22,7 @@ module.exports.getSantas = function(callback = santas => {}) {
     callback(santas[0]);
   });
 };
-module.exports.findMySanta = function(userID, callback=(res)=>{}) {
+module.exports.findMySanta = function(userID, callback = res => {}) {
   userID = sqlstring.escape(userID);
   db.query(
     `SELECT * FROM e_santas WHERE santaID = ${userID}`,
@@ -31,4 +31,15 @@ module.exports.findMySanta = function(userID, callback=(res)=>{}) {
       else callback("you are already santa!");
     }
   );
+};
+
+module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
+  secureCode = sqlstring.escape(secureCode);
+
+  users.findUserBySecure(secureCode,(user)=>{
+    userID = user['Id'];
+    db.query(`SELECT FrinedID FROM e_santas WHERE SantaID=${userID}`,(friend)=>{
+      callback(friend);
+    });
+  });
 };
