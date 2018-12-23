@@ -9,7 +9,7 @@ function becomeSanta(userID) {
     while (id == userID || id == undefined) {
       user = users[Math.floor(Math.random() * users.length)];
       console.log(user);
-      id = user.Id;
+      id = user.ID;
     }
     console.log(`new santa created for ${userID}`);
 
