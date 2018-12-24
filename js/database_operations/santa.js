@@ -2,7 +2,7 @@ const db = require("../database");
 const users = require("../database_operations/users");
 const sqlstring = require("sqlstring");
 
-function becomeSanta(userID) {
+function becomeSanta(userID, callback=santa=>{}) {
   console.log("start creating new santa");
   module.exports.getFriends(friends => {
     users.getUsers(users => {
@@ -69,7 +69,9 @@ module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
       }`,
       friend => {
         console.log("friend:", friend);
-        if (friend[0] == undefined) return becomeSanta(userID);
+        if (friend[0] == undefined) return becomeSanta(userID, santa =>{
+          return findMyFriend(secureCode);
+        });
         callback(friend[0].Name);
       }
     );
