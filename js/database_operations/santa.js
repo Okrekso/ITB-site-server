@@ -4,10 +4,13 @@ const sqlstring = require("sqlstring");
 
 function becomeSanta(userID) {
   console.log("start creating new santa");
-  module.exports.getSantas(santas => {
+  module.exports.getFriends(friends => {
     users.getUsers(users => {
       let id = userID;
-      while (id == userID || id == undefined) {
+      while (
+        id == userID ||
+        id == undefined ||
+        friends.filter(e => e == id).length != 0) {
         user = users[Math.floor(Math.random() * users.length)];
         console.log(user);
         id = user.ID;
@@ -29,6 +32,13 @@ module.exports.getSantas = function(callback = santas => {}) {
     callback(santas[0]);
   });
 };
+
+module.exports.getFriends = function(callback = friends => {}) {
+  db.query(`CALL GetFriends`, friends => {
+    callback(friends[0]);
+  });
+};
+
 module.exports.findMySanta = function(secureCode, callback = yourSanta => {}) {
   users.findUserBySecure(secureCode, user => {
     if (user == undefined) {
