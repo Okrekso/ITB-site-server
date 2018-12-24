@@ -2,7 +2,7 @@ const db = require("../database");
 const users = require("../database_operations/users");
 const sqlstring = require("sqlstring");
 
-function becomeSanta(userID, callback=santa=>{}) {
+function becomeSanta(userID, callback=()=>{}) {
   console.log("start creating new santa");
   module.exports.getFriends(friends => {
     users.getUsers(users => {
@@ -21,6 +21,7 @@ function becomeSanta(userID, callback=santa=>{}) {
         `INSERT INTO e_santas(SantaID, FriendID)VALUES(${userID},${id})`,
         (res, err) => {
           console.error(err);
+          callback();
         }
       );
     });
