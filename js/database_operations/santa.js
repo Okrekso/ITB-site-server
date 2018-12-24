@@ -30,7 +30,7 @@ module.exports.getSantas = function(callback = santas => {}) {
 module.exports.findMySanta = function(userID, callback = res => {}) {
   userID = sqlstring.escape(userID);
   db.query(
-    `SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.FriendID=u.Id WHERE s.FriendID=${
+    `SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.SantaID=u.Id WHERE s.FriendID=${
       user.Id
     } AND Shown=1`,
     (result, err) => {
