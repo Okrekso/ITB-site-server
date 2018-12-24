@@ -6,7 +6,10 @@ module.exports.isTest = false
 // strings
 var app = express();
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", strings.s_site);
+  let origin = req.headers.origin;
+  if(strings.s_site.indexOf(origin)>-1)
+    res.setHeader("Access-Control-Allow-Origin", origin);
+
   res.header(
     "Access-Control-Allow-Headers",
     "Access-Control-Allow-Origin",
@@ -41,6 +44,8 @@ app.use("/gifts",require("./routers/r_gifts"));
 app.use("/payment", require("./routers/r_payment"));
 // grants
 app.use("/grants", require("./routers/r_grants"));
+// santas
+app.use("/santa", require("./routers/r_santa"));
 
 app.listen(process.env.PORT);
 // app.listen(3000);
