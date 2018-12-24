@@ -4,7 +4,7 @@ const sqlstring = require("sqlstring");
 
 function becomeSanta(userID) {
   console.log("start creating new santa");
-  module.exports.getSantas((santas)=>{
+  module.exports.getSantas(santas => {
     users.getUsers(users => {
       let id = userID;
       while (id == userID || id == undefined) {
@@ -13,10 +13,12 @@ function becomeSanta(userID) {
         id = user.ID;
       }
       console.log(`new santa created for ${userID}`);
-  
+
       db.query(
         `INSERT INTO e_santas(SantaID, FriendID)VALUES(${userID},${id})`,
-        (res, err) => {console.error(err)}
+        (res, err) => {
+          console.error(err);
+        }
       );
     });
   });
@@ -27,23 +29,27 @@ module.exports.getSantas = function(callback = santas => {}) {
     callback(santas[0]);
   });
 };
-module.exports.findMySanta = function(userID, callback = res => {}) {
-  userID = sqlstring.escape(userID);
-  db.query(
-    `SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.SantaID=u.Id WHERE s.FriendID=${
-      user.Id
-    } AND Shown=1`,
-    (result, err) => {
-      if (result[0] == undefined) callback("your santa is hidden :)");
+module.exports.findMySanta = function(secureCode, callback = yourSanta => {}) {
+  users.findUserBySecure(secureCode, user => {
+    if (user == undefined) {
+      return console.log("no such user", secureCode);
     }
-  );
+    userID = user["Id"];
+    db.query(
+      `SELECT Name FROM USERS as u INNER JOIN e_santas as s ON s.SantaID=u.Id WHERE s.FriendID=${userID} AND Shown=1`,
+      (result, err) => {
+        if (result[0] == undefined) return callback("your santa is hidden :)");
+        else return callback(result[0]);
+      }
+    );
+  });
 };
 
 module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
   console.log(secureCode, "finding santa");
   users.findUserBySecure(secureCode, user => {
     if (user == undefined) {
-      console.log("no such user:",secureCode, user);
+      console.log("no such user:", secureCode, user);
       return;
     }
     userID = user["Id"];
