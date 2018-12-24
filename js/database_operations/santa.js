@@ -70,7 +70,7 @@ module.exports.findMyFriend = function(secureCode, callback = friend => {}) {
       friend => {
         console.log("friend:", friend);
         if (friend[0] == undefined) return becomeSanta(userID, santa =>{
-          return findMyFriend(secureCode);
+          return findMyFriend(secureCode, callback);
         });
         callback(friend[0].Name);
       }
