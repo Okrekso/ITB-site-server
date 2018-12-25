@@ -47,5 +47,6 @@ app.use("/grants", require("./routers/r_grants"));
 // santas
 app.use("/santa", require("./routers/r_santa"));
 
-app.listen(process.env.PORT);
+let server = app.listen(process.env.PORT);
+server.setTimeout(10000);
 // app.listen(3000);
