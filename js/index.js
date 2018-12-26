@@ -47,5 +47,8 @@ app.use("/grants", require("./routers/r_grants"));
 // santas
 app.use("/santa", require("./routers/r_santa"));
 
+let timeout = require("connect-timeout");
+app.use(timeout('7s'));
+
 app.listen(process.env.PORT);
 // app.listen(3000);
