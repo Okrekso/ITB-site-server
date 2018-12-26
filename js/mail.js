@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const db = require("./database");
 const strings = require("./strings");
 // requiers
-var default_from = '"IT BEANS Club💻" <support@itbeans.online>';
+var default_from = '"IT BEANS Club💻" <support@itbeans.xyz>';
 var siteURL = "test.itbns";
 
 function defaultCallback(err, info) {
@@ -25,7 +25,7 @@ function sendMail(
     host: "mx1.hostinger.com",
     port: 587,
     auth: {
-      user: "support@itbeans.online",
+      user: "support@itbeans.xyz",
       pass: process.env.emailPass
     }
   });
@@ -41,7 +41,7 @@ function sendPassword(to, newSecure, callback = defaultCallback) {
     to: to,
     subject: "Password change",
     html: `<b>Hello! It's IT Beans club!</b><br> We've detected that you want to change your password. If you doesn't change your mind folow this link to do this:<a href='${
-      strings.s_site
+      strings.s_site[0]
     }/account/?change=${newSecure}'>link</a>`
   };
   sendMail(mailOptions, (err, info) => {

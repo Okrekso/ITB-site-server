@@ -19,6 +19,7 @@ router.get("/forgetPass", (req, res) => {
     }
 
     mail.sendPassword(to, newSecure, (err, info) => {
+      if(err) console.error("error sending mail:",err);
       console.log("mail sent:", info);
       res.send("mail sent");
     });

@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect-timeout": "^1.9.0",
     "express": "^4.16.4",
     "liqpay": "0.0.1",
     "mysql": "^2.16.0",
