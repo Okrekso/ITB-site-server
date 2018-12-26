@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const db = require("./database");
 const strings = require("./strings");
 // requiers
-var default_from = '"IT BEANS Club💻" <support@itbeans.online>';
+var default_from = '"IT BEANS Club💻" <support@itbeans.xyz>';
 var siteURL = "test.itbns";
 
 function defaultCallback(err, info) {
