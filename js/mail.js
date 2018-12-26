@@ -25,7 +25,7 @@ function sendMail(
     host: "mx1.hostinger.com",
     port: 587,
     auth: {
-      user: "support@itbeans.online",
+      user: "support@itbeans.xyz",
       pass: process.env.emailPass
     }
   });
