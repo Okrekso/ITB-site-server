@@ -22,11 +22,11 @@ function sendMail(
   callback = defaultCallback
 ) {
   var transporter = nodemailer.createTransport({
-    host: "mx1.hostinger.com",
-    port: 587,
+    host: require("./constants").e_host,
+    port: require("./constants").e_port,
     auth: {
-      user: "support@itbeans.xyz",
-      pass: process.env.emailPass
+      user: require("./constants").e_user,
+      pass: require("./constants").e_pass
     }
   });
 
